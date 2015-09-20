@@ -1,0 +1,18 @@
+{
+    "contents" : "abandoned = read.csv(\"Data/Abandoned_Data_Seed.csv\",header = T,stringsAsFactors = F)\nreservation = read.csv(\"Data/Reservation_Data_Seed.csv\",header = T,stringsAsFactors = F)\n\nnrow(abandoned)\nreservation[reservation$Test_Control=='test',]\nnrow(reservation[reservation$Test_Control=='test',])\n\n\n#### Getting Duplicates in both Datasets\n#Email only\nmatching = match(abandoned$Email,reservation$Email,nomatch = 0)\nmatching[matching==92] = 0\nmatching[matching > 0] # 75 obs\n\n#Incoming Phone only\nmatching = match(abandoned$Incoming_Phone,reservation$Incoming_Phone,nomatch = 0)\nmatching\nmatching[matching==1329] = 0\nmatching[matching > 0] # 327 obs\n\n#Contact Phone only\nmatching = match(abandoned$Contact_Phone,reservation$Contact_Phone,nomatch = 0)\nmatching\nmatching[matching==1] = 0\nmatching[matching > 0] # 185 obs\n\n",
+    "created" : 1442766900176.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "554480746",
+    "id" : "59E98DE7",
+    "lastKnownWriteTime" : 1442769948,
+    "path" : "~/Studies/Courses/USF/Statistical Data Mining/MightyHive Project/MightyHive-Project/MightyHive Project.R",
+    "project_path" : "MightyHive Project.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

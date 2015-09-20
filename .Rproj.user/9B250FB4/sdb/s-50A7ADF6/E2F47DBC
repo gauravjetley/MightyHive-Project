@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1442769165470.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E2F47DBC",
+    "lastKnownWriteTime" : 232978640,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "x64djj70yo",
+        "caption" : "reservation",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=reservation&cache_key=x64djj70yo",
+        "displayedObservations" : "20814",
+        "environment" : "",
+        "object" : "reservation",
+        "totalObservations" : "20814",
+        "variables" : "12"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
