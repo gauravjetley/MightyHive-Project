@@ -82,9 +82,22 @@ sum(match(abandoned_match$Email,reservation_match$Email, nomatch = 0) |
 
 # Checking for more than one reservations 
 duplicated(reservation_match$Incoming_Phone, incomparables = "")
-sum(duplicated(reservation_match$Incoming_Phone,incomparables = "")) # 10 obs with >1 reservation from same Incomeing Phone
+sum(duplicated(reservation_match$Incoming_Phone,incomparables = "")) # 10 obs with >1 reservation from same Incoming Phone
 
 duplicated(reservation_match$Contact_Phone,incomparables = "")
 sum(duplicated(reservation_match$Contact_Phone, incomparables = "")) # 0 obs with >1 reservation from same Contact Phone
+
+duplicated(reservation_match$Email,incomparables = "")
+sum(duplicated(reservation_match$Email, incomparables = ""))
+
+# Removing >1 reservation obs from reservation_match dataset
+reservation_match_oneres = reservation_match[!duplicated(reservation_match$Incoming_Phone, incomparables = ""),]
+
+duplicated(reservation_match_oneres$Email,incomparables = "")
+sum(duplicated(reservation_match_oneres$Email, incomparables = ""))
+
+
+# Writing new reservation_match_oneres dataset
+write.csv(x = reservation_match, file = "reservation_match_oneres.csv")
 
 
