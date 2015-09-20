@@ -9,8 +9,10 @@ nrow(reservation[reservation$Test_Control=='test',])
 #### Getting Duplicates in both Datasets
 #Email only
 matching_email = match(abandoned$Email,reservation$Email,nomatch = 0)
+matching_email
+duplicated(matching_email)
+matching_email[!duplicated(matching_email)] # (76-2) = 74 obs
 
-matching_email[!duplicated(matching_email)] # 76 obs
 
 
 #Incoming Phone only
@@ -28,16 +30,44 @@ matching_contact[!duplicated(matching_contact)] # 166 obs
 #Eamil | Incoming Phone | Contact 
 matching_eic = ((abandoned$Incoming_Phone %in% reservation$Incoming_Phone) 
                 | (abandoned$Contact_Phone %in% reservation$Contact_Phone) 
-                | abandoned$Email %in% reservation$Email) 
-                & 
-                  (!duplicated(matching_email) 
-                   | !duplicated(matching_incoming) 
-                   | !duplicated(matching_contact)
-                   )                                    # To select matching observations in Abandoned DataSet on either email, 
+                | abandoned$Email %in% reservation$Email)& 
+                (!duplicated(matching_email) 
+                | !duplicated(matching_incoming) 
+                | !duplicated(matching_contact)
+                )                                    # To select matching observations in Abandoned DataSet on either email, 
                                                         # incoming or Contact phone and removing any duplicates from either.
+matching_eic
 sum(matching_eic) 
-matching_data = abandoned[matching_eic,]
-nrow(matching_data) #388 obs in Abandoned matched with obs in Reservation Dataset
+abandoned_match = abandoned[matching_eic,]
+nrow(abandoned_match) #388 obs in Abandoned matched with obs in Reservation Dataset
 
-#Cleaning Matched Dataset
+### Getting corresponding matching Reservation Dataset
+
+matching_i_r = match(abandoned$Incoming_Phone, reservation$Incoming_Phone, nomatch = 0)
+matching_i_r = matching_i_r[!duplicated(matching_i_r)]
+matching_i_r
+
+matching_e_r = match(abandoned$Email, reservation$Email, nomatch = 0)
+matching_e_r = matching_e_r[!duplicated(matching_e_r)]
+matching_e_r
+
+matching_c_r = match(abandoned$Contact_Phone, reservation$Contact_Phone, nomatch = 0)
+matching_c_r = matching_c_r[!duplicated(matching_c_r)]
+matching_c_r
+
+matching_eic_r = c(matching_i_r,matching_e_r,matching_c_r)
+matching_eic_r
+
+matching_eic_r = matching_eic_r[!duplicated(matching_eic_r)]
+matching_eic_r
+
+reservation_match <- reservation[matching_eic_r,]
+reservation_match
+
+### Writing Matched datasets
+
+write.csv(x = reservation_match, file = "reservation_match.csv")
+write.csv(x = abandoned_match, file = "abandoned_match.csv")
+
+####Cleaning Matched Dataset
 
