@@ -69,5 +69,22 @@ reservation_match
 write.csv(x = reservation_match, file = "reservation_match.csv")
 write.csv(x = abandoned_match, file = "abandoned_match.csv")
 
-####Cleaning Matched Dataset
+####Cleaning Matched Datasets
+
+# Crosschecking for any errors
+sum(match(reservation_match$Email, abandoned_match$Email, nomatch = 0) | 
+  match(reservation_match$Incoming_Phone, abandoned_match$Incoming_Phone, nomatch = 0) |
+  match(reservation_match$Contact_Phone, abandoned_match$Contact_Phone, nomatch = 0))
+
+sum(match(abandoned_match$Email,reservation_match$Email, nomatch = 0) | 
+  match( abandoned_match$Incoming_Phone,reservation_match$Incoming_Phone, nomatch = 0) |
+  match( abandoned_match$Contact_Phone, reservation_match$Contact_Phone,nomatch = 0))
+
+# Checking for more than one reservations 
+duplicated(reservation_match$Incoming_Phone, incomparables = "")
+sum(duplicated(reservation_match$Incoming_Phone,incomparables = "")) # 10 obs with >1 reservation from same Incomeing Phone
+
+duplicated(reservation_match$Contact_Phone,incomparables = "")
+sum(duplicated(reservation_match$Contact_Phone, incomparables = "")) # 0 obs with >1 reservation from same Contact Phone
+
 
