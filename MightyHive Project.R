@@ -24,3 +24,8 @@ matching
 matching[matching==1] = 0
 matching[matching > 0] # 185 obs
 
+#Eamil | Incoming Phone | Contact 
+matching = (abandoned$Incoming_Phone %in% reservation$Incoming_Phone) | (abandoned$Contact_Phone %in% reservation$Contact_Phone) | abandoned$Email %in% reservation$Email
+sum(matching) 
+
+matching_data = abandoned[matching,]
