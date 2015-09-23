@@ -108,7 +108,7 @@ reservation_match_oneres <- reservation_match_oneres[!duplicated(reservation_mat
 nrow(reservation_match_oneres) # one less than abandoned_match
 
 # Writing new reservation_match_oneres dataset
-write.csv(x = reservation_match, file = "reservation_match_oneres.csv")
+write.csv(x = reservation_match_oneres, file = "reservation_match_oneres.csv")
 
 
 #Abandoned_match dataset cleaning
@@ -125,4 +125,59 @@ abandoned_match_nodup <- abandoned_match[!duplicated(abandoned_match$Contact_Pho
 nrow(abandoned_match_nodup) # Same as reservation_match_oneres
 
 # Writing new abandoned_match_nodup data set
-write.csv(x = reservation_match, file = "abandoned_match_nodup.csv")
+write.csv(x = abandoned_match_nodup, file = "abandoned_match_nodup.csv")
+
+
+
+#########
+
+# Creating variable for Bought/Not Bought in abandoned_matched_nodup:
+
+abandoned_match_nodup[,13] <- 1  #V13 is variable for Bought(1) and NoBought(0)
+
+# Concatenating Abandoned and Abandoned_match_nodup together in excel
+
+abandoned_match_nodup_all <- read.csv("~/Studies/Courses/USF/Statistical Data Mining/MightyHive Project/MightyHive-Project/abandoned_match_nodup_all.csv",stringsAsFactors = FALSE)
+
+# Removing Duplicates
+sum(duplicated(abandoned_match_nodup_all$Incoming_Phone, incomparables = "")) #447
+sum(duplicated(abandoned_match_nodup_all$Contact_Phone, incomparables = "")) #516
+sum(duplicated(abandoned_match_nodup_all$Email, incomparables = "")) #97
+
+abandoned_match_nodup_all_c <- abandoned_match_nodup_all[!duplicated(abandoned_match_nodup_all$Contact_Phone, incomparables = ""),]
+abandoned_match_nodup_all_c <- abandoned_match_nodup_all_c[!duplicated(abandoned_match_nodup_all_c$Incoming_Phone, incomparables = ""),]
+abandoned_match_nodup_all_c <- abandoned_match_nodup_all_c[!duplicated(abandoned_match_nodup_all_c$Email, incomparables = ""),]
+
+sum(duplicated(abandoned_match_nodup_all_c)) # duplicates removed
+
+#### Creating Dummy Variables
+#Test_Control
+abandoned_match_nodup_all_c$Test_Control[abandoned_match_nodup_all_c$Test_Control=="control"] <- 0 
+abandoned_match_nodup_all_c$Test_Control[abandoned_match_nodup_all_c$Test_Control=="test"] <- 1 
+
+abandoned_match_nodup_all_c$Test_Control <- as.factor(abandoned_match_nodup_all_c$Test_Control)
+
+#Email
+abandoned_match_nodup_all_c$Email[abandoned_match_nodup_all_c$Email==""] <- 0
+abandoned_match_nodup_all_c$Email[abandoned_match_nodup_all_c$Email!="0"] <- 1
+
+abandoned_match_nodup_all_c$Email <- as.factor(abandoned_match_nodup_all_c$Email)
+
+#Address
+abandoned_match_nodup_all_c$Address[abandoned_match_nodup_all_c$Address==""] <- 0
+abandoned_match_nodup_all_c$Address[abandoned_match_nodup_all_c$Address!="0"] <- 1
+
+abandoned_match_nodup_all_c$Test_Control <- as.factor(abandoned_match_nodup_all_c$Test_Control)
+
+#Contact
+abandoned_match_nodup_all_c$Contact_Phone[abandoned_match_nodup_all_c$Contact_Phone==""] <- 0
+abandoned_match_nodup_all_c$Contact_Phone[abandoned_match_nodup_all_c$Contact_Phone!="0"] <- 1
+
+
+#Interaction Terms
+
+
+#Manuplating date time in excel
+
+write.csv(abandoned_match_nodup_all_c ,"abandoned_match_nodup_all_c.csv")
+
