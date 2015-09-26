@@ -340,3 +340,16 @@ write.csv(x = abandoned_match_nodup, file = "abandoned_match_nodup.csv")
 
 
 
+### Reading Final Cleaned Datasets
+
+Non_int_data <- read.csv("both_matched_aban_v5.csv",header = T,stringsAsFactors = F)
+Int_data <- read.csv("Datasets for Interactions/both_matched_aban_v7.csv",header = T,stringsAsFactors = F)
+
+lm <- lm(Outcome~Days_in_Between+D_State+D_Email+Test_Variable,data = Non_int_data)
+summary(lm)
+
+lm_int <- lm(Outcome~Days_in_Between+ D_State+ D_Email+ Test_Variable+ Int_T_Email+ Int_T_State,data = Int_data)
+summary(lm_int)
+
+plot(lm_int)
+

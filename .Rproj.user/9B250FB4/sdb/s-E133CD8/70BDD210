@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1443295999148.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "70BDD210",
+    "lastKnownWriteTime" : 21392300099829876,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "hye159w4kw",
+        "caption" : "Int_data",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=Int_data&cache_key=hye159w4kw",
+        "displayedObservations" : "7324",
+        "environment" : "",
+        "object" : "Int_data",
+        "totalObservations" : "7324",
+        "variables" : "8"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
