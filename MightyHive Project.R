@@ -177,7 +177,162 @@ abandoned_match_nodup_all_c$Contact_Phone[abandoned_match_nodup_all_c$Contact_Ph
 #Interaction Terms
 
 
-#Manuplating date time in excel
+####Manuplating date time in excel
 
 write.csv(abandoned_match_nodup_all_c ,"abandoned_match_nodup_all_c.csv")
+
+
+
+
+
+
+
+
+##########################################
+### SECOND TAKE AT MATCHING DATASETS ####
+##########################################
+
+
+#### CREATING NEW DATASET WITH (CONTACT + INCOMING) and (INCOMING + EMAIL) KEYS
+
+#### Getting Duplicates in both Datasets
+
+#Eamil & Incoming Phone | Contact & Incoming 
+matching_eic = (((abandoned$Incoming_Phone %in% reservation$Incoming_Phone) 
+                & (abandoned$Contact_Phone %in% reservation$Contact_Phone) 
+                ) |  ((abandoned$Incoming_Phone %in% reservation$Incoming_Phone) 
+                     & (abandoned$Email %in% reservation$Email) 
+                ) )& 
+                (!duplicated(matching_incoming) 
+                | !duplicated(matching_contact)
+                | !duplicated(matching_email) )     # To select matching observations in Abandoned DataSet on either email, 
+                                      # incoming or Contact phone and removing any duplicates from either.
+matching_eic
+sum(matching_eic) 
+abandoned_match = abandoned[matching_eic,]
+nrow(abandoned_match) #340 obs in Abandoned matched with obs in Reservation Dataset
+
+abandoned_match <- abandoned[matching_eic,]
+abandoned_match
+
+### Getting corresponding matching Reservation Dataset
+
+matching_eic_r = ((reservation$Incoming_Phone %in% abandoned_match$Incoming_Phone) &
+                 (reservation$Contact_Phone %in% abandoned_match$Contact_Phone))
+                 #Only matching on incoming and contact because email is giving wrong values(matching blanks with blanks)
+                 
+                 
+sum(matching_eic_r) #330
+matching_eic_r
+
+reservation_match <- reservation[matching_eic_r,]
+reservation_match
+
+(match(reservation_match$Incoming_Phone,abandoned_match$Incoming_Phone)&
+  match(reservation_match$Contact_Phone,abandoned_match$Contact_Phone))
+
+
+
+
+
+
+
+
+##########################################
+##### THIRD TAKE AT MATCHING DATASETS ####
+##########################################
+
+# Created 2 keys in Excel for each data set
+# Key 1: In_Co <- concatinate(incoming,contact)
+# Key 2: In_Em <- concatinate(incoming,email)
+# Removed all blank keys
+
+#loading the 2 datasets with keys
+abandoned = read.csv("Abandoned_with_keys.csv",header = T,stringsAsFactors = F)
+reservation = read.csv("Reservation_with_keys.csv",header = T,stringsAsFactors = F)
+
+
+
+#### Getting Matching in both Datasets
+match(abandoned$In_Co,reservation$In_Co,nomatch = 0) | match(abandoned$In_Em,reservation$In_Em,nomatch = 0) #175
+match(reservation$In_Co,abandoned$In_Co,nomatch = 0) | match(reservation$In_Em,abandoned$In_Em,nomatch = 0) #186
+
+#In_Co and In_Em 
+#abandoned dataset
+matching_eic = ((abandoned$In_Co %in% reservation$In_Co) | (abandoned$In_Em %in% reservation$In_Em))
+matching_eic
+sum(matching_eic) 
+abandoned_match = abandoned[matching_eic,]
+nrow(abandoned_match) #175 obs in Abandoned matched with obs in Reservation Dataset
+  #removing duplicates
+  sum(!duplicated(abandoned_match)) #still 175 so all good
+  abandoned_match_nodup <- abandoned_match
+
+#reservation dataset
+inco <- match(abandoned_match_nodup$In_Co, reservation$In_Co,nomatch = 0)
+inem <- match(abandoned_match_nodup$In_Em, reservation$In_Em,nomatch = 0)
+inco <- inco[inco != 0]
+inco
+inem <- inem[inem != 0]
+inem
+
+reservation_match <- reservation[c(inco,inem),]
+nrow(reservation_match) #231
+  #removing duplicates
+  reservation_match_nodup <- reservation_match[!duplicated(reservation_match),]
+  nrow(reservation_match_nodup) #171
+
+
+### Getting corresponding matching Reservation Dataset
+match(reservation_match_nodup$In_Co, abandoned_match_nodup$In_Co, nomatch = 0)
+match(reservation_match_nodup$In_Em, abandoned_match_nodup$In_Em, nomatch = 0)  
+indexinco <- match(abandoned_match_nodup$In_Co, reservation_match_nodup$In_Co, nomatch = 0)
+indexinem <- match(abandoned_match_nodup$In_Em, reservation_match_nodup$In_Em, nomatch = 0)
+
+abandoned_match_nodup[,15] <- indexinco
+abandoned_match_nodup[,16] <- indexinem
+
+### Writing Matched datasets
+
+write.csv(x = reservation_match_nodup, file = "reservation_match_nodup.csv")
+write.csv(x = abandoned_match_nodup, file = "abandoned_match_nodup.csv")
+
+
+
+
+
+
+
+
+#### Creating Dummy Variables
+#Test_Control
+abandoned_match_nodup_all_c$Test_Control[abandoned_match_nodup_all_c$Test_Control=="control"] <- 0 
+abandoned_match_nodup_all_c$Test_Control[abandoned_match_nodup_all_c$Test_Control=="test"] <- 1 
+
+abandoned_match_nodup_all_c$Test_Control <- as.factor(abandoned_match_nodup_all_c$Test_Control)
+
+#Email
+abandoned_match_nodup_all_c$Email[abandoned_match_nodup_all_c$Email==""] <- 0
+abandoned_match_nodup_all_c$Email[abandoned_match_nodup_all_c$Email!="0"] <- 1
+
+abandoned_match_nodup_all_c$Email <- as.factor(abandoned_match_nodup_all_c$Email)
+
+#Address
+abandoned_match_nodup_all_c$Address[abandoned_match_nodup_all_c$Address==""] <- 0
+abandoned_match_nodup_all_c$Address[abandoned_match_nodup_all_c$Address!="0"] <- 1
+
+abandoned_match_nodup_all_c$Test_Control <- as.factor(abandoned_match_nodup_all_c$Test_Control)
+
+#Contact
+abandoned_match_nodup_all_c$Contact_Phone[abandoned_match_nodup_all_c$Contact_Phone==""] <- 0
+abandoned_match_nodup_all_c$Contact_Phone[abandoned_match_nodup_all_c$Contact_Phone!="0"] <- 1
+
+
+#Interaction Terms
+
+
+####Manuplating date time in excel
+
+write.csv(abandoned_match_nodup_all_c ,"abandoned_match_nodup_all_c.csv")
+
 

@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1443284227016.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "5D26290C",
+    "lastKnownWriteTime" : 1443282671,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "0knlrid2b2",
+        "caption" : "abandoned_match_nodup",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=abandoned_match_nodup&cache_key=0knlrid2b2",
+        "displayedObservations" : 175,
+        "environment" : "",
+        "object" : "abandoned_match_nodup",
+        "totalObservations" : 175,
+        "variables" : 15
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
