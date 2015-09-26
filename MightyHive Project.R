@@ -298,41 +298,45 @@ write.csv(x = reservation_match_nodup, file = "reservation_match_nodup.csv")
 write.csv(x = abandoned_match_nodup, file = "abandoned_match_nodup.csv")
 
 
+##### Done in Excel
 
+#NON INTERACTION DATASET
+#Creating Reservation_Index in excel in both datasets to match properly
+#Sorting the datasets in excel according to Res_Index
+#Converting the session variable to datetime in excel
+#Subtracting Reservation session with Abandoned session to get days_in_between
+#Creating days_in_between variable in excel
+#subtituting session variable with days_in_between variable in the abandoned dataset
+#Combining the abandoned dataset with newly created both_matched_v3 dataset
+#removing duplicates with criteria (incoming and contact) first and then (email and incoming). (7325 obs left)
+#replacing days_in_between variable values in abandoned dataset rows with 200. (abandoned dataset rows are above 171)
+#deleting Caller_ID, Last_Name, Street, City, Zipcode variables in the both_matched_aban dataset
+#Adding Customer_ID variable with index as ID from 1 to 7325
+#Creating Variables D_Email (email given: 1), D_State (state given: 1), Outcome (reservation: 1), Test_Variable (test,control)
+#Saving dataset as both_matched_aban_v3
+#Removing Address, Email, Incoming_Phone, Contact_Phone
+#Saving as both_matched_aban_v4
+#deleting First_Name variable and saving dataset as both_matched_aban_v5
+#Final dataset is both_matched_aban_v5 (no interactions)
 
+#INTERACTION DATASET
+#Saved in Interaction Folder
+#both_matched_v3 includes matched abandoned and reservation obs with Date, Time, days_in_between, in_co, in_em
+# Creating Interactions:
+    #Int_T_Email: 0: no email given, time value: email given
+    #Int_T_State: 0: no state given, 1: state given
+#Saved as both_match_V4
+#Combining abandoned with both_match_v4 and saving as both_match_aban_v1
+#Populating Values for Time, Date, Days_in_Between, In_Co, In-Em, Int_T_Email, Int_T_State
+#Saving as both_match_aban_v2
+# Removing Duplicates using In_Co first and then In_Em (7325 obs left)
+#Saving as both_match_aban_v3
+# Converting both interaction variable values to "only hour" values
+#Saving as both_match_aban_v4
+#Created Customer_ID, D_Email, D_State, Outcome variables
+#Saving as both_match_aban_v5
+#Deleting Address, email variables and saving as both_match_aban_v6
+#Deleting First_Name and saving as both_match_aban_v7
 
-
-
-
-#### Creating Dummy Variables
-#Test_Control
-abandoned_match_nodup_all_c$Test_Control[abandoned_match_nodup_all_c$Test_Control=="control"] <- 0 
-abandoned_match_nodup_all_c$Test_Control[abandoned_match_nodup_all_c$Test_Control=="test"] <- 1 
-
-abandoned_match_nodup_all_c$Test_Control <- as.factor(abandoned_match_nodup_all_c$Test_Control)
-
-#Email
-abandoned_match_nodup_all_c$Email[abandoned_match_nodup_all_c$Email==""] <- 0
-abandoned_match_nodup_all_c$Email[abandoned_match_nodup_all_c$Email!="0"] <- 1
-
-abandoned_match_nodup_all_c$Email <- as.factor(abandoned_match_nodup_all_c$Email)
-
-#Address
-abandoned_match_nodup_all_c$Address[abandoned_match_nodup_all_c$Address==""] <- 0
-abandoned_match_nodup_all_c$Address[abandoned_match_nodup_all_c$Address!="0"] <- 1
-
-abandoned_match_nodup_all_c$Test_Control <- as.factor(abandoned_match_nodup_all_c$Test_Control)
-
-#Contact
-abandoned_match_nodup_all_c$Contact_Phone[abandoned_match_nodup_all_c$Contact_Phone==""] <- 0
-abandoned_match_nodup_all_c$Contact_Phone[abandoned_match_nodup_all_c$Contact_Phone!="0"] <- 1
-
-
-#Interaction Terms
-
-
-####Manuplating date time in excel
-
-write.csv(abandoned_match_nodup_all_c ,"abandoned_match_nodup_all_c.csv")
 
 
