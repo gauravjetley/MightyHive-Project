@@ -455,9 +455,50 @@ fit
 summary(fit)
 plot(fit)
 
+plot(Int_data_v2$Outcome~Int_data_v2$Test_Var, main="")
+abline(fit)
+
 
 #Q14: Now add to the regression model the dummies for State and Emails. Also consider 
 #including interactions with the treatment. Report the outcome and comment on the results. 
 #(You can compare with Q10)
 
 Int_data_v2 <- read.csv("Datasets for Interactions/both_matched_aban_v8.csv",header = TRUE,stringsAsFactors = FALSE)
+
+fit2 <- lm(Outcome~Test_Var+D_State+D_Email+Int_Test_Email+Int_Test_State,data=Int_data_v2)
+fit2
+summary(fit2)
+
+#Removing D_State
+fit2 <- lm(Outcome~Test_Var+D_Email+Int_Test_Email+Int_Test_State,data=Int_data_v2)
+fit2
+summary(fit2) #increased R^2 slightly 
+
+#adding Int_T_Email_bin
+fit2 <- lm(Outcome~Test_Var+Int_T_Email_bin+D_Email+Int_Test_Email+Int_Test_State,data=Int_data_v2)
+fit2
+summary(fit2) #increased R^2 
+
+#adding Int_T_State_bin
+fit2 <- lm(Outcome~Test_Var+D_Email+Int_T_State_bin+Int_Test_Email+Int_Test_State,data=Int_data_v2)
+fit2
+summary(fit2) #decreased R^2
+
+#Going with addition of Int_T_Email_bin+Int_Test_Email+Int_Test_State to the model
+fit2 <- lm(Outcome~Test_Var+Int_T_Email_bin+D_Email+Int_Test_Email+Int_Test_State,data=Int_data_v2)
+fit2
+summary(fit2)
+plot(fit2)
+
+
+
+#RQ2 You want now to investigate whether the response time (time to make a purchase after the first contact)
+#is influenced by the retargeting campaign.
+#Q15: Set up an appropriate linear regression model to address the RQ2 above. Make sure to select the 
+#appropriate subset of customers.Report output analysis with your interpretation. Can the coefficients 
+#be interpreted as causal in this case?
+
+fit3 <- lm(Days_in_Between~Test_Variable,data=Int_data_v2[Int_data_v2$Days_in_Between!=200,])
+summary(fit3)
+plot(fit3)
+
