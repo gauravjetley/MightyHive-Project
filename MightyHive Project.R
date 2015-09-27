@@ -401,13 +401,13 @@ nrow(Int_data[(Int_data$Test_Variable=="control") & (Int_data$Outcome!=1), ])
 #Control	      30    	3614
 
 library(ggplot2)                           
-# Set up the vectors                           
+# Setting up the vectors                           
 Outcome <- c("Buy","No Buy")
 Group <- c("Control","Trearment")
-# Create the data frame
+# Creating data frame
 df <- expand.grid(Outcome, Group)
 df$value <- c(30,3614,139,3541)    
-#Plot the Data
+#Plotting Data
 g <- ggplot(df, aes(Var1, Var2)) + geom_point(aes(size = value), colour = "green") + theme_bw() + xlab("Outcome") + ylab("Group")
 g + scale_size_continuous(range=c(10,30)) + geom_text(aes(label = value))
 
