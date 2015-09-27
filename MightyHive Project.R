@@ -423,11 +423,22 @@ nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome!=1) & (Q10$Address=="LA"), ]
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="LA"), ])
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="LA"), ])
 
+df <- expand.grid(Outcome, Group)
+df$value <- c(0,29,1,36)    
+g <- ggplot(df, aes(Var1, Var2)) + geom_point(aes(size = value), colour = "green") + theme_bw() + xlab("Outcome") + ylab("Group")
+g + scale_size_continuous(range=c(10,30)) + geom_text(aes(label = value))
+
+
 #ND
 nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome==1) & (Q10$Address=="ND"), ])
 nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome!=1) & (Q10$Address=="ND"), ])
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="ND"), ])
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="ND"), ])
+
+df <- expand.grid(Outcome, Group)
+df$value <- c(2,32,2,19)    
+g <- ggplot(df, aes(Var1, Var2)) + geom_point(aes(size = value), colour = "green") + theme_bw() + xlab("Outcome") + ylab("Group")
+g + scale_size_continuous(range=c(10,30)) + geom_text(aes(label = value))
 
 #MO
 nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome==1) & (Q10$Address=="MO"), ])
@@ -435,17 +446,34 @@ nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome!=1) & (Q10$Address=="MO"), ]
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="MO"), ])
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="MO"), ])
 
+df <- expand.grid(Outcome, Group)
+df$value <- c(0,28,1,35)    
+g <- ggplot(df, aes(Var1, Var2)) + geom_point(aes(size = value), colour = "green") + theme_bw() + xlab("Outcome") + ylab("Group")
+g + scale_size_continuous(range=c(10,30)) + geom_text(aes(label = value))
+
+
 #WY
 nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome==1) & (Q10$Address=="WY"), ])
 nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome!=1) & (Q10$Address=="WY"), ])
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="WY"), ])
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="WY"), ])
 
+df <- expand.grid(Outcome, Group)
+df$value <- c(0,33,1,35)    
+g <- ggplot(df, aes(Var1, Var2)) + geom_point(aes(size = value), colour = "green") + theme_bw() + xlab("Outcome") + ylab("Group")
+g + scale_size_continuous(range=c(10,30)) + geom_text(aes(label = value))
+
+
 #OR
 nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome==1) & (Q10$Address=="OR"), ])
 nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome!=1) & (Q10$Address=="OR"), ])
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="OR"), ])
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="OR"), ])
+
+df <- expand.grid(Outcome, Group)
+df$value <- c(0,33,3,30)    
+g <- ggplot(df, aes(Var1, Var2)) + geom_point(aes(size = value), colour = "green") + theme_bw() + xlab("Outcome") + ylab("Group")
+g + scale_size_continuous(range=c(10,30)) + geom_text(aes(label = value))
 
 
 #Q11: Run a Linear regression model for Outcome = alpha + beta * Test_Variable + error
@@ -501,4 +529,25 @@ plot(fit2)
 fit3 <- lm(Days_in_Between~Test_Variable,data=Int_data_v2[Int_data_v2$Days_in_Between!=200,])
 summary(fit3)
 plot(fit3)
+
+
+
+########################################
+####### Using Random Forest ############
+########################################
+
+library(randomForest)
+
+
+#splitting dataset into 80:20
+train <- Int_data_v2[c(1:135,170:5893),]
+test <- Int_data_v2[c(136:169,5894:7324),]
+
+fittree <- randomForest(as.factor(Outcome)~Test_Var+Int_T_Email_bin+
+                          D_Email+Int_Test_Email+Int_Test_State+Days_in_Between,
+                        data = train, importance=TRUE,type=classification)
+print(fittree)
+
+test[,15] <- predict(fittree,newdata = test)
+# 100% success rate at predicting the Outcome!
 
