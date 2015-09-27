@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1443352061980.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "533B4279",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "nnnecxwpf9",
+        "caption" : "Q10",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=Q10&cache_key=nnnecxwpf9",
+        "displayedObservations" : 7324,
+        "environment" : "",
+        "object" : "Q10",
+        "totalObservations" : 7324,
+        "variables" : 11
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -345,11 +345,104 @@ write.csv(x = abandoned_match_nodup, file = "abandoned_match_nodup.csv")
 Non_int_data <- read.csv("both_matched_aban_v5.csv",header = T,stringsAsFactors = F)
 Int_data <- read.csv("Datasets for Interactions/both_matched_aban_v7.csv",header = T,stringsAsFactors = F)
 
-lm <- lm(Outcome~Days_in_Between+D_State+D_Email+Test_Variable,data = Non_int_data)
-summary(lm)
 
-lm_int <- lm(Outcome~Days_in_Between+ D_State+ D_Email+ Test_Variable+ Int_T_Email+ Int_T_State,data = Int_data)
-summary(lm_int)
+#Q2 compute the summary statistics (mean, median, q5, q95, standard deviation) 
+#of the Test_variable: a dummy with a value of 1 if tested 0 if control in the ABD database.
 
-plot(lm_int)
+Test <- abandoned$Test_Control
+Test[Test=="test"] <- 1
+Test[Test=="control"] <- 0
+
+mean(as.numeric(Test))
+median(as.numeric(Test))
+sd(as.numeric(Test))
+quantile(as.numeric(Test),c(.05,.95))
+hist(as.numeric(Test), main="Histogram of Test_Control Variable",labels = c("Control","","","","","","","","","Test"))
+
+
+#Q3: compute the same summary statistics for this Test_variable by blocking on States 
+#(meaning considering only the entries with known “State”), wherever this information is available.
+
+Test <- abandoned$Test_Control[abandoned$Address!=""]
+Test[Test=="test"] <- 1
+Test[Test=="control"] <- 0
+Test <- as.numeric(Test)
+mean(as.numeric(Test))
+median(as.numeric(Test))
+sd(as.numeric(Test))
+quantile(as.numeric(Test),c(.05,.95))
+hist(as.numeric(Test), main="Histogram of Test_Control Variable (State-only Level)",labels = c("Control","","","","","","","","","Test"))
+
+#Q7 1: Identification of Customers in the TREATMENT group who bought
+Int_data[(Int_data$Test_Variable=="test") & (Int_data$Outcome==1), ]
+
+#(2) Identification of Customers in the TREATMENT group who did not buy
+head(Int_data[(Int_data$Test_Variable=="test") & (Int_data$Outcome!=1), ])
+
+#(3) Identification of Customers in the Control group who bought:
+head(Int_data[(Int_data$Test_Variable=="control") & (Int_data$Outcome==1), ])
+
+#(4) Identification of Customers in the Control group who did not buy
+head(Int_data[(Int_data$Test_Variable=="control") & (Int_data$Outcome!=1), ])
+
+#Q9 Complete the following cross-tabulation:
+
+#Group\Outcome  Buy	    No Buy
+#Treatment      Number	Number
+#Control	      Number	Number
+
+nrow(Int_data[(Int_data$Test_Variable=="test") & (Int_data$Outcome==1), ])
+nrow(Int_data[(Int_data$Test_Variable=="test") & (Int_data$Outcome!=1), ])
+nrow(Int_data[(Int_data$Test_Variable=="control") & (Int_data$Outcome==1), ])
+nrow(Int_data[(Int_data$Test_Variable=="control") & (Int_data$Outcome!=1), ])
+
+#Group\Outcome  Buy	    No Buy
+#Treatment      139   	3541
+#Control	      30    	3614
+
+library(ggplot2)                           
+# Set up the vectors                           
+Outcome <- c("Buy","No Buy")
+Group <- c("Control","Trearment")
+# Create the data frame
+df <- expand.grid(Outcome, Group)
+df$value <- c(30,3614,139,3541)    
+#Plot the Data
+g <- ggplot(df, aes(Var1, Var2)) + geom_point(aes(size = value), colour = "green") + theme_bw() + xlab("Outcome") + ylab("Group")
+g + scale_size_continuous(range=c(10,30)) + geom_text(aes(label = value))
+
+
+#Q10 Repeat Q9 for 5 randomly picked states. Report 5 different tables by specifying the states you “randomly picked”.
+Q10 <- read.csv("Datasets for Interactions/both_matched_aban_v5.csv",header = TRUE,stringsAsFactors = FALSE)
+
+#LA
+nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome==1) & (Q10$Address=="LA"), ])
+nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome!=1) & (Q10$Address=="LA"), ])
+nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="LA"), ])
+nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="LA"), ])
+
+#ND
+nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome==1) & (Q10$Address=="ND"), ])
+nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome!=1) & (Q10$Address=="ND"), ])
+nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="ND"), ])
+nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="ND"), ])
+
+#MO
+nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome==1) & (Q10$Address=="MO"), ])
+nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome!=1) & (Q10$Address=="MO"), ])
+nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="MO"), ])
+nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="MO"), ])
+
+#WY
+nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome==1) & (Q10$Address=="WY"), ])
+nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome!=1) & (Q10$Address=="WY"), ])
+nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="WY"), ])
+nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="WY"), ])
+
+#OR
+nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome==1) & (Q10$Address=="OR"), ])
+nrow(Q10[(Q10$Test_Variable=="test") & (Q10$Outcome!=1) & (Q10$Address=="OR"), ])
+nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="OR"), ])
+nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="OR"), ])
+
 
