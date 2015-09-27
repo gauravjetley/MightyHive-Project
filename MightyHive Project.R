@@ -337,7 +337,9 @@ write.csv(x = abandoned_match_nodup, file = "abandoned_match_nodup.csv")
 #Saving as both_match_aban_v5
 #Deleting Address, email variables and saving as both_match_aban_v6
 #Deleting First_Name and saving as both_match_aban_v7
-
+#Adding Interactions variables Int_T_State_bin (binary), Int_T_Email_bin (binary), Int_Test_Email (Test*D_Email), Int_Test_State(Test*D_State), Test_Var (binary)
+#Readding First_Names for future analysis (Male/Female) using NLP
+#Saving as both_matching_v8
 
 
 ### Reading Final Cleaned Datasets
@@ -446,3 +448,16 @@ nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome==1) & (Q10$Address=="OR")
 nrow(Q10[(Q10$Test_Variable=="control") & (Q10$Outcome!=1) & (Q10$Address=="OR"), ])
 
 
+#Q11: Run a Linear regression model for Outcome = alpha + beta * Test_Variable + error
+
+fit <- lm(Outcome~Test_Variable, data=Int_data)
+fit
+summary(fit)
+plot(fit)
+
+
+#Q14: Now add to the regression model the dummies for State and Emails. Also consider 
+#including interactions with the treatment. Report the outcome and comment on the results. 
+#(You can compare with Q10)
+
+Int_data_v2 <- read.csv("Datasets for Interactions/both_matched_aban_v8.csv",header = TRUE,stringsAsFactors = FALSE)

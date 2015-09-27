@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1443355290506.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B18FCF5E",
+    "lastKnownWriteTime" : 21392300099829876,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "pmeu9gobul",
+        "caption" : "Int_data",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=Int_data&cache_key=pmeu9gobul",
+        "displayedObservations" : 7324,
+        "environment" : "",
+        "object" : "Int_data",
+        "totalObservations" : 7324,
+        "variables" : 8
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
