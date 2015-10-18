@@ -530,6 +530,10 @@ fit3 <- lm(Days_in_Between~Test_Variable,data=Int_data_v2[Int_data_v2$Days_in_Be
 summary(fit3)
 plot(fit3)
 
+install.packages("car")
+library(car)
+
+influencePlot(fit3)
 
 
 ########################################
